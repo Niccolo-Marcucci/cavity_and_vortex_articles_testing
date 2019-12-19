@@ -5,7 +5,15 @@
 # to be set.
 
 deleteall;
-addpath('lib');
+
+# set project directories
+root_dir = '~/Documents/Lumerical-projects/01-cavity_with_spiral_outcoupler/';           # insert absolut path of project directory            
+lib_dir = "Lumerical-Objects/";                                                 # library directory relative to root
+end_dir = '';                                                                   # directory where the simulation file will lay 
+
+cd(root_dir+lib_dir);
+
+?pwd;
 
 addfdtd;
 
@@ -14,13 +22,13 @@ set('name','mesh_top');
 
 # elements in the personal library
 
-multilayer;
+read('multilayer.lsf');
 set('name','multilayer');
 
-circular_cavity;
+read('circular_cavity.lsf');
 set('name','pmma with circular cavity');
 
-spiral;
+read('spiral_outcoupler.lsf');
 set('name','outcoupler spiral groove');
 
 # elements in the standard library
@@ -47,5 +55,23 @@ set('name','monitor yz');
 
 # analysis from personal library
 
-spectral_analysis;
+read('spectral_analysis_sphere.lsf');
 set('name','resonance finder outside');
+set('monitor at boundaries',1);
+set('domain dimensions',2);
+
+read('spectral_analysis_sphere.lsf');
+set('name','resonance finder inside');
+set('monitor at boundaries',0);
+set('domain dimensions',2);
+
+
+# save the project in .fps and open the setup script
+cd('../');
+cd('end_dir');
+
+save('circular_cavity_with_spiral_outcoupler');
+
+
+
+
