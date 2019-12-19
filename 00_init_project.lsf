@@ -1,0 +1,51 @@
+# This file inserts only all the objects required for the simulation, whitout
+# assigning any value to their properties. Thus all objects will be placed one 
+# on to of the others.
+# The last line actually call another file whre those properties are supposed 
+# to be set.
+
+deleteall;
+addpath('lib');
+
+addfdtd;
+
+addmesh;
+set('name','mesh_top');
+
+# elements in the personal library
+
+multilayer;
+set('name','multilayer');
+
+circular_cavity;
+set('name','pmma with circular cavity');
+
+spiral;
+set('name','outcoupler spiral groove');
+
+# elements in the standard library
+
+addcircle;
+set('name','beam block');
+
+adddipole;
+set('name','TM source');
+
+# monitors
+
+addpower;
+set('name','top field power');
+
+addprofile;
+set('name','top field profile');
+
+addindex;
+set('name','monitor xy');
+
+addindex;
+set('name','monitor yz');
+
+# analysis from personal library
+
+spectral_analysis;
+set('name','resonance finder outside');
