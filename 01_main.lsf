@@ -8,11 +8,12 @@ width=30e-9;
 # multilayer
 design_file = 'Lumerical-Objects/multilayer_design/best_design.ldf';
 loaddata(design_file);  # contains layer description (n1, d, effective indeces)
+d = d_layers;
 dg=0.4e-6;
 d(1) = dg ;
 d(end) = 0 ; # air
 tail = d(end-1); # last layer
-?n_eff = n_eff;  # effective index with pmma 
+?n_eff = n_eff1;  # effective index with pmma 
 if (tail == 0) { tail = d(end-2); } # without pmma last layer is end-2
 thickness = sum(d);
 

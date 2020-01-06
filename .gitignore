@@ -1,2 +1,5 @@
 *.fsp
 *.lms
+*.log
+*.bak
+*.mpg
