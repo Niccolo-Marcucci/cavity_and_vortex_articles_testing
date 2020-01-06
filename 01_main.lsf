@@ -6,21 +6,19 @@ lambda=570e-9;
 width=30e-9;
 
 # multilayer
-N_layers = 11;
-nH = 2.53;
-nL = 1.65;
-ng = 1.50;
-dH = 60e-9;
-dL = 130e-9;
+design_file = 'Lumerical-Objects/multilayer_design/best_design.ldf';
+loaddata(design_file);  # contains layer description (n1, d, effective indeces)
 dg=0.4e-6;
-tail = 30e-9;
+d(1) = dg ;
+d(end) = 0 ; # air
+tail = d(end-1); # last layer
+?n_eff = n_eff;  # effective index with pmma 
+if (tail == 0) { tail = d(end-2); } # without pmma last layer is end-2
+thickness = sum(d);
 
 # cavity and outcoupler on pmma
-n_eff = 1.136;
-d_pmma = 75e-9;
-n_pmma = 1.4914; 
 N_dbr = 30;
-N_outcoupler = 0;
+N_outcoupler = 10;
 cavity_diameter = 612e-9;
 period_dbr = 245e-9;
 period_outcoupler = lambda/n_eff;
@@ -35,79 +33,63 @@ PML_extension_z=1e-6;
 d_air=800e-9;
 
 # set simulation parameter
-load("cavity_with_spiral_grating.fps");
+#load("cavity_with_spiral_grating.fps");
 
 select("FDTD");
     set("x",0);
     set("y",0);
     set("x span",L);
     set("y span",L);
-    set("z min",-(dg+N_layers*(dH+dL)));
-    set("z max",d_pmma+d_air);
+    set("z min",-thickness);
+    set("z max",d_air);
     set("dimension","3D");
     set("simulation time",10000e-15);
-    set("auto shutoff min",1e-6);
+    set("auto shutoff min",1e-5);
 
 select("mesh_top");
     set("x",0);
     set("y",0);
     set("x span",L);
     set("y span",L);
-    set("z min",-3*(dH+dL));
-    set("z max",d_pmma+d_air/4);
-    
-#select("mesh_bottom");
-    #set("x",0);
-    #set("y",0);
-    #set("x span",L);
-    #set("y span",L);
-    #set("z min",-(dg+N_layers*(dH+dL)));
-    #set("z max",d_pmma+d_air);
+    set("z min",-3*sum(d(end-5:end)));
+    set("z max",d_air/4);
   
 select("multilayer");
-    set("substrate index",ng);
+    set("data file",design_file);
     set("substrate thickness",dg+PML_extension_z);
-    set("H index",nH);
-    set("H thickness",dH);
-    set("L index",nL);
-    set("L thickness",dL);
-    set("N layer couples", N_layers);
-    set("first layer type", 0);
-    set("last layer type", 1);
-    set("last layer thickness", dH);
     set("domain size", L+PML_extension_xy); 
     
-select("pmma with circular cavity");
+select("circular cavity");
     set("N_periods", N_dbr);
     set("D",cavity_diameter);
     set("period",period_dbr);
-    set("thickness",d_pmma);
+    set("thickness",tail);
     set("n_groove",1);
-    set("n_layer",n_pmma);
-    set("domain size", L+PML_extension_xy);
+    set("z min", -tail);
 
 select("outcoupler spiral groove");
     set("index groove",1);
     set("n rings",N_outcoupler);
     set("topological charge",2);
-    set("thickness",d_pmma);
+    set("thickness",tail);
     set("resolution",50);
     set("start radius",cavity_diameter/2+N_dbr*period_dbr+spacing_cavity_outcoupler);
     set("dbr period",period_outcoupler);
+    set("z min", -tail);
     
 select("beam block");
     set("radius",cavity_diameter/2+N_dbr/2*(period_dbr));
-    set("z min",d_pmma+d_air*2/3+10e-9);
-    set("z max",d_pmma+d_air*2/3+100e-9);
+    set("z min",d_air*2/3+10e-9);
+    set("z max",d_air*2/3+100e-9);
     
     
 
 # sources and monitors
 
-select("TM");
+select("TM source");
     set("x",0);
     set("y",0);
-    set("z",d_pmma/3);
+    set("z",-tail*2/3);
     set("override global source settings",1);
     set("set wavelength",1);
     set("optimize for short pulse",0);
@@ -118,32 +100,19 @@ select("TM");
     set("phi",0);
     set("dipole type","Electric Dipole");
 
-select("top field");
+select("top field power");
     set("x",0);
     set("y",0);
     set("x span",L);
     set("y span",L);
-    set("z",d_pmma+d_air*3/4+110e-9);
-select("top field second");
+    set("z",d_air*3/4+110e-9);
+select("top field profile");
     set("x",0);
     set("y",0);
     set("x span",L);
     set("y span",L);
-    set("z",d_pmma+d_air*3/4+110e-9);
+    set("z",d_air*3/4+110e-9);
 
-select("top field_1");
-    set("x",0);
-    set("y",0);
-    set("x span",L);
-    set("y span",L);
-    set("z",d_pmma+10e-9);
-select("top field second_1");
-    set("x",0);
-    set("y",0);
-    set("x span",L);
-    set("y span",L);
-    set("z",d_pmma+10e-9);
-    
 #select("video_XY");
     #set("x",0);
     #set("y",0);
@@ -160,33 +129,35 @@ select("top field second_1");
     
 select("resonance finder outside");
     set("radius",cavity_diameter/2+N_dbr*period_dbr+spacing_cavity_outcoupler/2);
-    set("z",d_pmma/2);
+    set("z",-tail/2);
 
 select("resonance finder inside");
     set("x",0);
     set("y",0);
-    set("start_radius",cavity_diameter/2);
-    set("z",d_pmma/2);
+    set("radius",cavity_diameter/2);
+    set("z",-tail/2);
     
-select("Qanalysis");
-    set("x",0);
-    set("y",0);
-    set("z",d_pmma/2);
+#select("Qanalysis");
+    #set("x",0);
+    #set("y",0);
+    #set("z",-tail/2);
     
         
 select("monitor yz");
+    set('monitor type', '2D X-normal');
     set("x",0);
     set("y",0);
     set("y span",L);
-    set("z min",-(dg+N_layers*(dH+dL)));
-    set("z max",d_pmma+d_air);  
+    set("z min",-thickness);
+    set("z max",d_air);  
     
 select("monitor xy");
+    set('monitor type', '2D Z-normal');
     set("x",0);
     set("y",0);
     set("x span",L);
     set("y span",L);
-    set("z min",d_pmma/2);
+    set("z",-tail/2);
 
 select("");
 

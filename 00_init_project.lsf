@@ -1,8 +1,7 @@
 # This file inserts only all the objects required for the simulation, whitout
 # assigning any value to their properties. Thus all objects will be placed one 
-# on to of the others.
-# The last line actually call another file whre those properties are supposed 
-# to be set.
+# over the other.
+
 
 deleteall;
 
@@ -18,11 +17,11 @@ set('name','mesh_top');
 
 # elements in the personal library
 
-multilayer;
+multilayer_from_data;
 set('name','multilayer');
 
 circular_cavity;
-set('name','pmma with circular cavity');
+set('name','circular cavity');
 
 spiral_outcoupler;
 set('name','outcoupler spiral groove');
@@ -65,7 +64,7 @@ set('domain dimensions',2);
 # save the project in .fps and open the setup script
 cd('../');
 
-save('circular_cavity_with_spiral_outcoupler');
+save('circular_cavity_with_spiral_outcoupler_on_pmma');
 
 
 
