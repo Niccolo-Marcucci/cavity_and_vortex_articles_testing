@@ -18,24 +18,24 @@ if (tail == 0) { tail = d(end-2); } # without pmma last layer is end-2
 thickness = sum(d);
 
 # cavity and outcoupler on pmma
-N_dbr = 30;
-N_outcoupler = 10;
+N_dbr = 0;
+N_outcoupler = 5;
 cavity_diameter = 640e-9;
 period_dbr = 265e-9;
 period_outcoupler = lambda/n_eff;
-spacing_cavity_outcoupler = 1000e-9;#500e-9;
+spacing_cavity_outcoupler = 2000e-9;#500e-9;
 spacing_after_outcoupler = 100e-9;
 
 # domain
 L=cavity_diameter+2*(N_dbr*period_dbr+spacing_cavity_outcoupler+
                N_outcoupler*period_outcoupler+period_outcoupler+spacing_after_outcoupler);
-PML_extension_xy=1e-6;
+PML_extension_xy=5e-6;
 PML_extension_z=1e-6;
 d_air=800e-9;
 
 # set simulation parameter
-load("cavity_with_spiral_grating2.fps");
-#save('cavity_with_spiral_grating2.fps');
+#load("no_cavity_with_spiral_outcoupler_on_pmma2.fps");
+#save('no_cavity_with_spiral_outcoupler_on_pmma2.fps');
 
 select("FDTD");
     set("x",0);
@@ -46,20 +46,20 @@ select("FDTD");
     set("z max",d_air);
     set("dimension","3D");
     set("background index",1);
-    set("simulation time",10000e-15);
+    set("simulation time",2000e-15);
     set("auto shutoff min",1e-5);
-    set("mesh accuracy",3);
+    set("mesh accuracy",4);
 
 select("mesh_top");
     set("x",0);
     set("y",0);
     set("x span",L);
     set("y span",L);
-    set("z min",-3*sum(d(end-4:end)));
-    set("z max",d_air/4);
+    set("z min",-sum(d(end-8:end)));
+    set("z max",d_air/8);
     set("dx",50e-9);
     set("dy",50e-9);
-    set("dz",5e-9);
+    set("dz",10e-9);
   
 select("multilayer");
     set("data file",design_file);
@@ -89,6 +89,7 @@ select("beam block");
     set("z min",d_air*2/3+10e-9);
     set("z max",d_air*2/3+100e-9);
     set("material",'PEC (Perfect Electrical Conductor)');
+    set('enabled',0);
     
     
 
@@ -157,7 +158,7 @@ select("monitor yz");
     set("y",0);
     set("y span",L);
     set("z min",-thickness);
-    set("z max",d_air);  
+    set("z max",d_air/2);  
     
 select("monitor xy");
     set('monitor type', '2D Z-normal');
@@ -171,7 +172,7 @@ select("");
 
 # simulation
 
-#run;
+run;
 
 # Bip sound after finishing
-#system("powershell -c [console]::beep(1000,1000)"); # valid for windows only ([Hz],[ms])
+system("powershell -c [console]::beep(1000,100)"); # valid for windows only ([Hz],[ms])
