@@ -34,7 +34,8 @@ PML_extension_z=1e-6;
 d_air=800e-9;
 
 # set simulation parameter
-#load("cavity_with_spiral_grating.fps");
+load("cavity_with_spiral_grating2.fps");
+#save('cavity_with_spiral_grating2.fps');
 
 select("FDTD");
     set("x",0);
@@ -87,6 +88,7 @@ select("beam block");
     set("radius",cavity_diameter/2+N_dbr/2*(period_dbr));
     set("z min",d_air*2/3+10e-9);
     set("z max",d_air*2/3+100e-9);
+    set("material",'PEC (Perfect Electrical Conductor)');
     
     
 
@@ -169,7 +171,7 @@ select("");
 
 # simulation
 
-run;
+#run;
 
 # Bip sound after finishing
-system("powershell -c [console]::beep(1000,10000)"); # valid for windows only ([Hz],[ms])
+#system("powershell -c [console]::beep(1000,1000)"); # valid for windows only ([Hz],[ms])
