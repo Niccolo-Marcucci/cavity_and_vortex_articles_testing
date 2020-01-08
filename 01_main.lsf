@@ -13,15 +13,15 @@ dg=0.4e-6;
 d(1) = dg ;
 d(end) = 0 ; # air
 tail = d(end-1); # last layer
-?n_eff = n_eff1;  # effective index with pmma 
+n_eff = n_eff1;  # effective index with pmma 
 if (tail == 0) { tail = d(end-2); } # without pmma last layer is end-2
 thickness = sum(d);
 
 # cavity and outcoupler on pmma
 N_dbr = 30;
 N_outcoupler = 10;
-cavity_diameter = 612e-9;
-period_dbr = 245e-9;
+cavity_diameter = 640e-9;
+period_dbr = 265e-9;
 period_outcoupler = lambda/n_eff;
 spacing_cavity_outcoupler = 1000e-9;#500e-9;
 spacing_after_outcoupler = 100e-9;
@@ -44,16 +44,21 @@ select("FDTD");
     set("z min",-thickness);
     set("z max",d_air);
     set("dimension","3D");
+    set("background index",1);
     set("simulation time",10000e-15);
     set("auto shutoff min",1e-5);
+    set("mesh accuracy",3);
 
 select("mesh_top");
     set("x",0);
     set("y",0);
     set("x span",L);
     set("y span",L);
-    set("z min",-3*sum(d(end-5:end)));
+    set("z min",-3*sum(d(end-4:end)));
     set("z max",d_air/4);
+    set("dx",50e-9);
+    set("dy",50e-9);
+    set("dz",5e-9);
   
 select("multilayer");
     set("data file",design_file);
@@ -112,7 +117,7 @@ select("top field profile");
     set("y",0);
     set("x span",L);
     set("y span",L);
-    set("z",d_air*3/4+110e-9);
+    set("z",10e-9);
 
 #select("video_XY");
     #set("x",0);
@@ -163,3 +168,8 @@ select("monitor xy");
 select("");
 
 # simulation
+
+run;
+
+# Bip sound after finishing
+system("powershell -c [console]::beep(1000,10000)"); # valid for windows only ([Hz],[ms])
