@@ -7,23 +7,39 @@ width=30e-9;
 
 # multilayer
 design_file = 'Lumerical-Objects/multilayer_design/best_design.ldf';
-loaddata(design_file);  # contains layer description (n1, d, effective indeces)
+loaddata(design_file);  # contains layer description (idx_layers, d_layers, BSW effective indeces)
 d = d_layers;
 dg=0.4e-6;
 d(1) = dg ;
-d(end) = 0 ; # air
-tail = d(end-1); # last layer
-n_eff = n_eff1;  # effective index with pmma 
-if (tail == 0) { tail = d(end-2); } # without pmma last layer is end-2
+d(end) = 0 ;                       # air
+tail = d(end-1);                   # last layer
+tail_idx = idx_layers(end-1);      # last layer refractive index
+if (tail == 0) {                   # without pmma last layer is end-2
+    tail = d(end-2); 
+    tail_idx = idx_layers(end-2);
+}
 thickness = sum(d);
 
-# cavity and outcoupler on pmma
-N_dbr = 0;
-N_outcoupler = 5;
-cavity_diameter = 640e-9;
+
+# cavity and outcoupler on last layer
+base_idx = 1;                      # overrides last layer refractive index   
+groove_idx = tail_idx;
+if (almostequal(base_idx,tail_idx)) {
+    source_zloc = 10e-9;
+    n_eff = n_eff2;
+    cavity_diameter = 620e-9;
+} else {
+    source_zloc = 10e-9 - tail;
+    n_eff = n_eff3;
+    cavity_diameter = 400e-9;
+}
+
+N_dbr = 30;
+N_outcoupler = 0;
+N_charge = 0;                     # topological charge
 period_dbr = 265e-9;
 period_outcoupler = lambda/n_eff;
-spacing_cavity_outcoupler = 2000e-9;#500e-9;
+spacing_cavity_outcoupler = 000e-9;
 spacing_after_outcoupler = 100e-9;
 
 # domain
@@ -34,8 +50,8 @@ PML_extension_z=1e-6;
 d_air=800e-9;
 
 # set simulation parameter
-#load("no_cavity_with_spiral_outcoupler_on_pmma2.fps");
-#save('no_cavity_with_spiral_outcoupler_on_pmma2.fps');
+#load("circular_cavity_without_outcoupler_negative.fps");
+#save('circular_cavity_without_outcoupler_negative.fps');
 
 select("FDTD");
     set("x",0);
@@ -46,7 +62,7 @@ select("FDTD");
     set("z max",d_air);
     set("dimension","3D");
     set("background index",1);
-    set("simulation time",2000e-15);
+    set("simulation time",20000e-15);
     set("auto shutoff min",1e-5);
     set("mesh accuracy",4);
 
@@ -66,18 +82,27 @@ select("multilayer");
     set("substrate thickness",dg+PML_extension_z);
     set("domain size", L+PML_extension_xy); 
     
+select('dummy layer');
+    set("x",0);
+    set("y",0);
+    set("x span",L);
+    set("y span",L);
+    set('z min',-tail);
+    set('z max',0);
+    set('index',base_idx);
+    
 select("circular cavity");
     set("N_periods", N_dbr);
     set("D",cavity_diameter);
     set("period",period_dbr);
     set("thickness",tail);
-    set("n_groove",1);
+    set("n_groove",groove_idx);
     set("z min", -tail);
 
 select("outcoupler spiral groove");
-    set("index groove",1);
+    set("index groove",groove_idx);
     set("n rings",N_outcoupler);
-    set("topological charge",2);
+    set("topological charge",N_charge);
     set("thickness",tail);
     set("resolution",50);
     set("start radius",cavity_diameter/2+N_dbr*period_dbr+spacing_cavity_outcoupler);
@@ -85,11 +110,11 @@ select("outcoupler spiral groove");
     set("z min", -tail);
     
 select("beam block");
-    set("radius",cavity_diameter/2+N_dbr/2*(period_dbr));
-    set("z min",d_air*2/3+10e-9);
-    set("z max",d_air*2/3+100e-9);
+    set("radius",2*cavity_diameter+spacing_cavity_outcoupler);
+    set("z min",d_air*3/4);
+    set("z max",d_air*3/4+100e-9);
     set("material",'PEC (Perfect Electrical Conductor)');
-    set('enabled',0);
+    set('enabled',1);
     
     
 
@@ -98,7 +123,7 @@ select("beam block");
 select("TM source");
     set("x",0);
     set("y",0);
-    set("z",-tail*2/3);
+    set("z",source_zloc);
     set("override global source settings",1);
     set("set wavelength",1);
     set("optimize for short pulse",0);
@@ -115,26 +140,13 @@ select("top field power");
     set("x span",L);
     set("y span",L);
     set("z",d_air*3/4+110e-9);
+
 select("top field profile");
     set("x",0);
     set("y",0);
     set("x span",L);
     set("y span",L);
     set("z",10e-9);
-
-#select("video_XY");
-    #set("x",0);
-    #set("y",0);
-    #set("x span",L/2);
-    #set("y span",L/2);
-    #set("z",d_pmma/2);
-        
-#select("video_YZ");
-    #set("x",0);
-    #set("y",0);
-    #set("y span",L);
-    #set("z max",d_pmma+200e-9);
-    #set("z min",-5*(dH+dL));
     
 select("resonance finder outside");
     set("radius",cavity_diameter/2+N_dbr*period_dbr+spacing_cavity_outcoupler/2);
@@ -145,6 +157,12 @@ select("resonance finder inside");
     set("y",0);
     set("radius",cavity_diameter/2);
     set("z",-tail/2);
+    
+#select("Qanalysis");
+    #set("x",0);
+    #set("y",0);
+    #set("radius",cavity_diameter/2);
+    #set("z",-tail/2);
     
 #select("Qanalysis");
     #set("x",0);
@@ -168,11 +186,30 @@ select("monitor xy");
     set("y span",L);
     set("z",-tail/2);
 
+#select("video_XY");
+    #set('monitor type', '2D Z-normal');
+    #set("x",0);
+    #set("y",0);
+    #set("x span",L/2);
+    #set("y span",L/2);
+    #set("z",source_zloc);
+    #set('horizontal resolution',1080);
+        
+#select("video_YZ");
+    #set('monitor type', '2D X-normal');
+    #set("x",0);
+    #set("y",0);
+    #set("y span",L/2);
+    #set("z max",d_air/2);
+    #set("z min",-sum(d(end-14:end)));
+    #set('horizontal resolution',1080);
+
 select("");
 
 # simulation
+save('circular_cavity_without_outcoupler_negative.fps');
 
-run;
+#run;
 
 # Bip sound after finishing
-system("powershell -c [console]::beep(1000,100)"); # valid for windows only ([Hz],[ms])
+#system("powershell -c [console]::beep(1000,5000)"); # valid for windows only ([Hz],[ms])

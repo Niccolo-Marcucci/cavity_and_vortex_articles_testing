@@ -20,6 +20,9 @@ set('name','mesh_top');
 multilayer_from_data;
 set('name','multilayer');
 
+addrect;   # useful for overriding the last layer of the multilayer
+set('name','dummy layer');
+
 circular_cavity;
 set('name','circular cavity');
 
@@ -60,11 +63,16 @@ set('name','resonance finder inside');
 set('monitors at boundaries',0);
 set('domain dimensions',2);
 
+Qanalysis_sphere;
+set('name','Qanalysis');
+set('monitors at boundaries',0);
+set('domain dimensions',2);
+
 
 # save the project in .fps and open the setup script
 cd('../');
 
-save('circular_cavity_with_spiral_outcoupler_on_pmma');
+save('circular_cavity_without_outcoupler_negative');
 
 
 

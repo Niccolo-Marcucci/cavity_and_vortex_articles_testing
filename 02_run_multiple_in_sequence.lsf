@@ -1,0 +1,41 @@
+clear;
+closeall;
+
+filename01 = 'circular_cavity_without_outcoupler_negative.fsp';
+filename02 = 'circular_cavity_without_outcoupler_positive.fsp';
+filename03 = 'no_cavity_spiral_outcoupler_negative.fsp';
+filename04 = 'no_cavity_spiral_outcoupler_positive.fsp';
+filename05 = 'circular_cavity_spiral_outcoupler_negative.fsp';
+filename06 = 'circular_cavity_spiral_outcoupler_positive.fsp';
+
+
+load(filename01);
+run;
+save(filename01);
+system("powershell -c [console]::beep(500,500)");
+
+load(filename02);
+run;
+save(filename02);
+system("powershell -c [console]::beep(500,500)");
+
+load(filename03);
+run;
+save(filename03);
+system("powershell -c [console]::beep(500,500)");
+
+load(filename04);
+run;
+save(filename04);
+system("powershell -c [console]::beep(500,500)");
+
+load(filename05);
+run;
+save(filename05);
+system("powershell -c [console]::beep(500,500)");
+
+load(filename06);
+run;
+save(filename06);
+
+system("powershell -c [console]::beep(1000,10000)"); # valid for windows only ([Hz],[ms])
