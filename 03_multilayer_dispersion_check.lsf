@@ -1,6 +1,16 @@
 # This file is usefull for creating a multilayer and analyse the near field at the 
 # interface and thus projecting it in the far field, so to obtain the multilayer dispersion
 
+
+main_dir = pwd; 
+
+sim_name = 'multilayer_dispersion_check';
+folder = 'SIM04_'+ sim_name;
+details = '';
+filename = folder +'/'+ sim_name + details + '.fsp' ;
+load(filename);
+cd(main_dir);
+
 # source
 lambda=570e-9;
 width=30e-9;
@@ -50,8 +60,6 @@ PML_extension_z=1e-6;
 d_air=800e-9;
 
 # set simulation parameter
-#load("circular_cavity_without_outcoupler_negative.fps");
-#save('circular_cavity_without_outcoupler_negative.fps');
 
 select("FDTD");
     set("x",0);
@@ -207,7 +215,7 @@ select("video_YZ");
 select("");
 
 # simulation
-save('multilayer_dispersion_check.fps');
+save(filename);
 
 #run;
 

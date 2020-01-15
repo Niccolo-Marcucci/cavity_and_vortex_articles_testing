@@ -1,4 +1,13 @@
-load('no_cavity_spiral_outcoupler_negative');
+
+main_dir = pwd; 
+
+sim_name = 'no_cavity_spiral_outcoupler';
+folder = 'SIM02_'+ sim_name;
+details = '_positive';
+filename = folder +'/'+ sim_name + details + '.fsp' ;
+load(filename);
+cd(main_dir);
+
 Ef=getresult('top field power','farfield');
 #image(Ef.ux,Ef.uy,pinch(Ef.Ep(:,:,1,1)));
 

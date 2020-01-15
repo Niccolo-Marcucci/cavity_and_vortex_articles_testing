@@ -1,6 +1,15 @@
 # This file contains all the parameter that are useful to be varied during the simulation.
 # all other quantities that it is known that are
 
+main_dir = pwd; 
+
+sim_name = 'no_cavity_spiral_outcoupler';
+folder = 'SIM02_'+ sim_name;
+details = '_positive';
+filename = folder +'/'+ sim_name + details + '.fsp' ;
+load(filename);
+cd(main_dir);
+
 # source
 lambda=570e-9;
 width=30e-9;
@@ -22,8 +31,8 @@ thickness = sum(d);
 
 
 # cavity and outcoupler on last layer
-base_idx = 1;                      # overrides last layer refractive index   
-groove_idx = tail_idx;
+base_idx = tail_idx;                      # overrides last layer refractive index   
+groove_idx = 1;
 if (almostequal(base_idx,tail_idx)) {
     source_zloc = 10e-9;
     n_eff = n_eff2;
@@ -34,12 +43,12 @@ if (almostequal(base_idx,tail_idx)) {
     cavity_diameter = 400e-9;
 }
 
-N_dbr = 30;
-N_outcoupler = 0;
-N_charge = 0;                     # topological charge
+N_dbr = 0;
+N_outcoupler = 5;
+N_charge = 2;                     # topological charge
 period_dbr = 265e-9;
 period_outcoupler = lambda/n_eff;
-spacing_cavity_outcoupler = 000e-9;
+spacing_cavity_outcoupler = 6000e-9;
 spacing_after_outcoupler = 100e-9;
 
 # domain
@@ -50,8 +59,6 @@ PML_extension_z=1e-6;
 d_air=800e-9;
 
 # set simulation parameter
-#load("circular_cavity_without_outcoupler_negative.fps");
-#save('circular_cavity_without_outcoupler_negative.fps');
 
 select("FDTD");
     set("x",0);
@@ -110,7 +117,7 @@ select("outcoupler spiral groove");
     set("z min", -tail);
     
 select("beam block");
-    set("radius",2*cavity_diameter+spacing_cavity_outcoupler);
+    set("radius",2*cavity_diameter+spacing_cavity_outcoupler/2);
     set("z min",d_air*3/4);
     set("z max",d_air*3/4+100e-9);
     set("material",'PEC (Perfect Electrical Conductor)');
@@ -140,13 +147,22 @@ select("top field power");
     set("x span",L);
     set("y span",L);
     set("z",d_air*3/4+110e-9);
+    set('override global monitor settings',1);
+    set('use source limits',0);
+    set('frequency points',1);
+    set('wavelength center',lambda);
+    
 
-select("top field profile");
+select("near field power");
     set("x",0);
     set("y",0);
     set("x span",L);
     set("y span",L);
     set("z",10e-9);
+    set('override global monitor settings',1);
+    set('use source limits',0);
+    set('frequency points',1);
+    set('wavelength center',lambda);
     
 select("resonance finder outside");
     set("radius",cavity_diameter/2+N_dbr*period_dbr+spacing_cavity_outcoupler/2);
@@ -206,10 +222,7 @@ select("monitor xy");
 
 select("");
 
-# simulation
-save('circular_cavity_without_outcoupler_negative.fps');
 
-#run;
+save(filename);
 
-# Bip sound after finishing
-#system("powershell -c [console]::beep(1000,5000)"); # valid for windows only ([Hz],[ms])
+cd(main_dir);
