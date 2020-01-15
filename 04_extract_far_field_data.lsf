@@ -5,8 +5,8 @@ Ef=getresult('top field power','farfield');
 ux = pinch(Ef.ux);
 uy = pinch(Ef.uy);
 
-useful_ux = abs(ux)<0.2;
-useful_uy = abs(uy)<0.2;
+useful_ux = find(abs(ux)<0.2);
+useful_uy = find(abs(uy)<0.2);
 ux = ux(useful_ux);
 uy = uy(useful_uy);
 
