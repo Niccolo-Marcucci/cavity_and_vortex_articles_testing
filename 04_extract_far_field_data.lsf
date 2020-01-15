@@ -1,0 +1,20 @@
+load('no_cavity_spiral_outcoupler_negative');
+Ef=getresult('top field power','farfield');
+#image(Ef.ux,Ef.uy,pinch(Ef.Ep(:,:,1,1)));
+
+ux = pinch(Ef.ux);
+uy = pinch(Ef.uy);
+
+useful_ux = abs(ux)<0.2;
+useful_uy = abs(uy)<0.2;
+ux = ux(useful_ux);
+uy = uy(useful_uy);
+
+E_theta = pinch(Ef.Ep(:,:,1,1));
+E_phi = pinch(Ef.Es(:,:,1,1));
+
+E_phi = E_phi(useful_ux,useful_uy);
+E_theta = E_theta(useful_ux,useful_uy);
+
+
+matlabsave('far_field_data',ux,uy,E_theta,E_phi);

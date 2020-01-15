@@ -72,7 +72,7 @@ set('domain dimensions',2);
 # save the project in .fps and open the setup script
 cd('../');
 
-save('circular_cavity_without_outcoupler_negative');
+save('multilayer_dispersion_check');
 
 
 
