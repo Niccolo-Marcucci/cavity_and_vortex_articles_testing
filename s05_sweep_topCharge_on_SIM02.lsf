@@ -9,17 +9,19 @@ sim_name03 = 'circular_cavity_spiral_outcoupler';
 
 sim_name = sim_name02;
 folder = 'SIM02_' + sim_name;
-sweep_folder = 'sweep_charge';
+sweep_folder = 'sweep_charge_and_ngrating';
 
-for (charge = - 3 : 3 ) {
+for (n_grating = [5, 10] ){
+for (charge = 3:-1:0) {
     details = '_positive';
     filename = folder + '/' + sim_name + details + '.fsp';
     load(filename);
     select("outcoupler spiral groove");
         set("topological charge",charge);
-    filename = sweep_folder  + '/' + sim_name + details + '_charge' + num2str(charge) + '.fsp'; #format available in next lumerical release,'%+02i'
+        set("n rings",n_grating);
+    filename = sweep_folder  + '/' + sim_name + details + '_charge' + num2str(charge) + "_N"+ num2str(n_grating) + '.fsp'; #format available in next lumerical release,'%+02i'
     save(filename);
-    #run;
+    run;
     system("powershell -c [console]::beep(500,500)");
     cd(main_dir);
     
@@ -28,12 +30,13 @@ for (charge = - 3 : 3 ) {
     load(filename);
     select("outcoupler spiral groove");
         set("topological charge",charge);
-    filename = sweep_folder  + '/' + sim_name + details + '_charge' + num2str(charge) + '.fsp';
+        set("n rings",n_grating);
+    filename = sweep_folder  + '/' + sim_name + details + '_charge' + num2str(charge) + "_N"+ num2str(n_grating) + '.fsp';
     save(filename);
-    #run;
+    run;
     system("powershell -c [console]::beep(500,500)");
     cd(main_dir);
 
-}
+}}
 
 system("powershell -c [console]::beep(800,10000)"); # valid for windows only ([Hz],[ms])

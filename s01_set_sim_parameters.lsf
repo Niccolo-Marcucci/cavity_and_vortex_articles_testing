@@ -5,7 +5,7 @@ main_dir = pwd;
 
 sim_name = 'no_cavity_spiral_outcoupler';
 folder = 'SIM02_'+ sim_name;
-details = '_positive';
+details = '_negative';
 filename = folder +'/'+ sim_name + details + '.fsp' ;
 load(filename);
 cd(main_dir);
@@ -31,8 +31,8 @@ thickness = sum(d);
 
 
 # cavity and outcoupler on last layer
-base_idx = tail_idx;                      # overrides last layer refractive index   
-groove_idx = 1;
+base_idx = 1;                      # overrides last layer refractive index   
+groove_idx = tail_idx;
 if (almostequal(base_idx,tail_idx)) {
     source_zloc = 10e-9;
     n_eff = n_eff2;
@@ -48,8 +48,8 @@ N_outcoupler = 5;
 N_charge = 2;                     # topological charge
 period_dbr = 265e-9;
 period_outcoupler = lambda/n_eff;
-spacing_cavity_outcoupler = 6000e-9;
-spacing_after_outcoupler = 100e-9;
+spacing_cavity_outcoupler = 4000e-9;
+spacing_after_outcoupler = 6000e-9;
 
 # domain
 L=cavity_diameter+2*(N_dbr*period_dbr+spacing_cavity_outcoupler+

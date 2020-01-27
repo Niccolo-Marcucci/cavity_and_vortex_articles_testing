@@ -1,9 +1,10 @@
-
+clear;
 main_dir = pwd; 
-
+n_g = 10;
+for (charge = 2 ) {
 sim_name = 'no_cavity_spiral_outcoupler';
-folder = 'SIM02_'+ sim_name;
-details = '_positive';
+folder = 'SIM02_'+ sim_name + '/' + 'sweep_charge_and_ngrating';
+details = '_negative_charge'+num2str(charge)+'_N'+num2str(n_g);
 filename = folder +'/'+ sim_name + details + '.fsp' ;
 load(filename);
 cd(main_dir);
@@ -26,4 +27,7 @@ E_phi = E_phi(useful_ux,useful_uy);
 E_theta = E_theta(useful_ux,useful_uy);
 
 
-matlabsave('far_field_data',ux,uy,E_theta,E_phi);
+matlabsave(folder+'/far_field_data/'+'far_field_data_negative_charge'+num2str(charge)+'_N'+num2str(n_g),ux,uy,E_theta,E_phi);
+system("powershell -c [console]::beep(500,500)");
+
+}
