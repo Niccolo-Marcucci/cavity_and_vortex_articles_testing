@@ -10,9 +10,9 @@ deleteall;
 
 main_dir = pwd;
 
-sim_name = 'no_cavity_spiral_outcoupler';
-folder = 'SIM02_'+ sim_name;
-details = '_negative';
+sim_name = 'circulr_cavity_with_outcoupler';
+folder = 'SIM01_'+ sim_name;
+details = '';
 filename = folder +'/'+ sim_name + details + '.fsp';
 
 lib_dir = "Lumerical-Objects/";                                    
@@ -35,8 +35,8 @@ set('name','dummy layer');
 circular_cavity;
 set('name','circular cavity');
 
-spiral_outcoupler;
-set('name','outcoupler spiral groove');
+scircular_cavity;
+set('name','outcoupler');
 
 # elements in the standard library
 
@@ -44,7 +44,7 @@ addcircle;
 set('name','beam block');
 
 adddipole;
-set('name','TM source');
+set('name','TE source');
 
 # monitors
 
@@ -72,18 +72,18 @@ set('name','resonance finder inside');
 set('monitors at boundaries',0);
 set('domain dimensions',2);
 
-#Qanalysis_sphere;
-#set('name','Qanalysis');
-#set('monitors at boundaries',0);
-#set('domain dimensions',2);
+Qanalysis_sphere;
+set('name','Qanalysis');
+set('monitors at boundaries',0);
+set('domain dimensions',2);
 
 
-# save the project in .fps and open the setup script
+# save the project in .fps 
 cd('../');
 
 save(filename);
 
-cd(main_dir);
+cd(main_dir); # saving inside a folder makes you enter in that folder
 
 
 
