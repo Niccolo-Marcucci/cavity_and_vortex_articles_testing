@@ -10,8 +10,8 @@ deleteall;
 
 main_dir = pwd;
 
-sim_name = 'circulr_cavity_with_outcoupler';
-folder = 'SIM01_'+ sim_name;
+sim_name = 'spiral_outcoupler';
+folder = 'SIM02_'+ sim_name;
 details = '';
 filename = folder +'/'+ sim_name + details + '.fsp';
 
@@ -26,16 +26,16 @@ set('name','mesh_top');
 
 # elements in the personal library
 
-multilayer_from_data;
+multilayer;
 set('name','multilayer');
 
 addrect;   # useful for overriding the last layer of the multilayer
-set('name','dummy layer');
+set('name','pmma layer');
 
-circular_cavity;
-set('name','circular cavity');
+#circular_cavity;
+#set('name','circular cavity');
 
-scircular_cavity;
+spiral_outcoupler;
 set('name','outcoupler');
 
 # elements in the standard library
