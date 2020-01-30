@@ -45,7 +45,7 @@ spacing_after_outcoupler = 5000e-9;
 source_zloc=tail+10e-9;
 
 # domain
-L_domain=15e-6;#cavity_diameter+2*(N_dbr*period_dbr+spacing_cavity_outcoupler+
+L_domain=15.5e-6;#cavity_diameter+2*(N_dbr*period_dbr+spacing_cavity_outcoupler+
                #N_outcoupler*period_outcoupler+period_outcoupler+spacing_after_outcoupler);
 PML_extension_xy=5e-6;
 PML_extension_z=1e-6;
