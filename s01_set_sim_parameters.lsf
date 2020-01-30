@@ -11,8 +11,8 @@ load(filename);
 cd(main_dir);
 
 # source
-lambda=570e-9;
-width=30e-9;
+lambda=532e-9;
+width=3e-9;
 
 # multilayer
 nH=2.08+1i*1e-4;
@@ -45,7 +45,7 @@ spacing_after_outcoupler = 5000e-9;
 source_zloc=tail+10e-9;
 
 # domain
-L_domain=15e-6;#cavity_diameter+2*(N_dbr*period_dbr+spacing_cavity_outcoupler+
+L_domain=16e-6;#cavity_diameter+2*(N_dbr*period_dbr+spacing_cavity_outcoupler+
                #N_outcoupler*period_outcoupler+period_outcoupler+spacing_after_outcoupler);
 PML_extension_xy=5e-6;
 PML_extension_z=1e-6;
@@ -63,7 +63,7 @@ select("FDTD");
     set("z max",d_air);
     set("dimension","3D");
     set("background index",1);
-    set("simulation time",20000e-15);
+    set("simulation time",10000e-15);
     set("auto shutoff min",1e-5);
     set("mesh accuracy",4);
 
@@ -74,8 +74,8 @@ select("mesh_top");
     set("y span",L_domain);
     set("z min",-N_couples/2*(dH+dL));
     set("z max",tail+d_air/8);
-    set("dx",25e-9);
-    set("dy",25e-9);
+    set("dx",15e-9);
+    set("dy",15e-9);
     set("dz",10e-9);
   
 select("multilayer");
@@ -129,7 +129,7 @@ select("beam block");
 
 # sources and monitors
 
-select("TE source");
+select("TE source x");
     set("x",0);
     set("y",0);
     set("z",source_zloc);
@@ -141,6 +141,19 @@ select("TE source");
     set("phase",0);
     set("theta",90);
     set("phi",0);
+    set("dipole type","Electric Dipole");
+select("TE source y");
+    set("x",0);
+    set("y",0);
+    set("z",source_zloc);
+    set("override global source settings",1);
+    set("set wavelength",1);
+    set("optimize for short pulse",0);
+    set("center wavelength",lambda);
+    set("wavelength span",width);
+    set("phase",90);
+    set("theta",90);
+    set("phi",90);
     set("dipole type","Electric Dipole");
 
 select("top field power");
@@ -225,6 +238,9 @@ select("monitor xy");
 select("");
 
 
+details = 'charge';
+filename = folder +'/'+ sim_name + details + num2str(N_charge) + '.fsp' ;
 save(filename);
 
 cd(main_dir);
+

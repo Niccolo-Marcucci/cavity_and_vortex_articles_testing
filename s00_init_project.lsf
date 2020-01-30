@@ -44,7 +44,9 @@ addcircle;
 set('name','beam block');
 
 adddipole;
-set('name','TE source');
+set('name','TE source x');
+adddipole;
+set('name','TE source y');
 
 # monitors
 
