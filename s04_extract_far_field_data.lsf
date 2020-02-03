@@ -1,33 +1,33 @@
 clear;
 main_dir = pwd; 
-n_g = 10;
-for (charge = 2 ) {
-sim_name = 'no_cavity_spiral_outcoupler';
-folder = 'SIM02_'+ sim_name + '/' + 'sweep_charge_and_ngrating';
-details = '_negative_charge'+num2str(charge)+'_N'+num2str(n_g);
-filename = folder +'/'+ sim_name + details + '.fsp' ;
-load(filename);
-cd(main_dir);
 
-Ef=getresult('top field power','farfield');
-#image(Ef.ux,Ef.uy,pinch(Ef.Ep(:,:,1,1)));
-
-ux = pinch(Ef.ux);
-uy = pinch(Ef.uy);
-
-useful_ux = find(abs(ux)<0.2);
-useful_uy = find(abs(uy)<0.2);
-ux = ux(useful_ux);
-uy = uy(useful_uy);
-
-E_theta = pinch(Ef.Ep(:,:,1,1));
-E_phi = pinch(Ef.Es(:,:,1,1));
-
-E_phi = E_phi(useful_ux,useful_uy);
-E_theta = E_theta(useful_ux,useful_uy);
-
-
-matlabsave(folder+'/far_field_data/'+'far_field_data_negative_charge'+num2str(charge)+'_N'+num2str(n_g),ux,uy,E_theta,E_phi);
-system("powershell -c [console]::beep(500,500)");
+sim_name = 'spiral_outcoupler';
+folder = 'SIM02_'+ sim_name;
+details = 'charge';
+for (j=[-1]) {
+    filename = sim_name + details + num2str(j) +'.fsp' ;
+    load(folder +'/'+ filename);
+    cd(main_dir);
+    
+    Ef=getresult('top field power','farfield');
+    #image(Ef.ux,Ef.uy,pinch(Ef.Ep(:,:,1,1)));
+    
+    ux = pinch(Ef.ux);
+    uy = pinch(Ef.uy);
+    
+    useful_ux = find(abs(ux)<0.2);
+    useful_uy = find(abs(uy)<0.2);
+    ux = ux(useful_ux);
+    uy = uy(useful_uy);
+    
+    E_theta = pinch(Ef.Ep(:,:,1,1));
+    E_phi = pinch(Ef.Es(:,:,1,1));
+    
+    E_phi = E_phi(useful_ux,useful_uy);
+    E_theta = E_theta(useful_ux,useful_uy);
+    
+    
+    matlabsave(folder+'/far_field_data/'+ filename,ux,uy,E_theta,E_phi);
+    #system("powershell -c [console]::beep(500,500)");
 
 }

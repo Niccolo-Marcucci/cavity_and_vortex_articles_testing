@@ -1,9 +1,9 @@
 clear,close all
-folder="SIM02_no_cavity_spiral_outcoupler/sweep_charge_and_ngrating/far_field_data/";
-top_charge=2;
-for n_g=[10]
+folder="SIM02_spiral_outcoupler/far_field_data/";
+
+for top_charge=-1
  
-load(strcat(folder,"far_field_data","_charge",string(top_charge),"_N",string(n_g)));
+load(strcat(folder,"spiral_outcoupler","charge",string(top_charge)));
 % 
 % useful_ux = abs(ux)<0.2;
 % useful_uy = abs(uy)<0.2;
@@ -39,20 +39,20 @@ plot_surf(ux,uy,abs(Ey).^2   +abs(Ex).^2,'Intensity from Ex and Ey');
 subplot(1,2,1)
 plot_surf(ux,uy,abs(E_phi).^2+abs(E_theta).^2,'Intensity from E_\phi and E_\theta');
 %%
-% figure
-% subplot(2,3,1)
-% plot_surf(ux,uy,abs(ER).^2,"Right circular polarization intensity");
-% subplot(2,3,2)
-% plot_surf(ux,uy,abs(EL).^2,"Left circular polarization intensity");
-% subplot(2,3,4)
-% plot_surf(ux,uy,angle(ER),"Right circular polarization phase");
-% subplot(2,3,5)
-% plot_surf(ux,uy,angle(EL),"Left circular polarization phase");
-% 
-% subplot(2,3,3)
-% plot_surf(ux,uy,real(S3),"S3 Stokes parameter");
-% subplot(2,3,6)
-% plot_surf(ux,uy,abs(tan(chi)),"eccentricity |tan\chi|");
+figure
+subplot(2,3,1)
+plot_surf(ux,uy,abs(ER).^2,"Right circular polarization intensity");
+subplot(2,3,2)
+plot_surf(ux,uy,abs(EL).^2,"Left circular polarization intensity");
+subplot(2,3,4)
+plot_surf(ux,uy,angle(ER),"Right circular polarization phase");
+subplot(2,3,5)
+plot_surf(ux,uy,angle(EL),"Left circular polarization phase");
+
+subplot(2,3,3)
+plot_surf(ux,uy,real(S3),"S3 Stokes parameter");
+subplot(2,3,6)
+plot_surf(ux,uy,abs(tan(chi)),"eccentricity |tan\chi|");
 end
 
 
