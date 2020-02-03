@@ -11,7 +11,7 @@ for (j=[-1,0,2]) {
     load(filename);
     run;
     cd(main_dir);
-    system("powershell -c [console]::beep(500,500)"); # valid for windows only ([Hz],[ms])
+    #system("powershell -c [console]::beep(500,500)"); # valid for windows only ([Hz],[ms])
 }
 
-    system("powershell -c [console]::beep(500,5000)"); # valid for windows only ([Hz],[ms])
+    #system("powershell -c [console]::beep(500,5000)"); # valid for windows only ([Hz],[ms])
