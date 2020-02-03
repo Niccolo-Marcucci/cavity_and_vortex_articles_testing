@@ -6,7 +6,7 @@ main_dir = pwd;
 sim_name = 'spiral_outcoupler';
 folder = 'SIM02_'+ sim_name;
 details = 'charge';
-for (j=[-1,0,2]) {
+for (j=[-1,2]) {
     filename = folder +'/'+ sim_name + details + num2str(j) +'.fsp' ;
     load(filename);
     run;

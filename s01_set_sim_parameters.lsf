@@ -15,8 +15,8 @@ lambda=532e-9;
 width=3e-9;
 
 # multilayer
-nH=2.08+1i*1e-4;
-nL=1.46+1i*1e-4;
+nH=2.08+1i*1e-5;
+nL=1.46+1i*1e-5;
 dH=95e-9;
 dL=137e-9;
 dlast=127e-9;
@@ -36,7 +36,7 @@ groove_idx = 1;
 cavity_diameter = 0;
 N_dbr = 0;
 N_outcoupler = 5;
-N_charge = 2;                     # topological charge
+N_charge = -1;                     # topological charge
 period_dbr = 0;
 period_outcoupler = 450e-9;
 spacing_cavity_outcoupler = 5000e-9;
