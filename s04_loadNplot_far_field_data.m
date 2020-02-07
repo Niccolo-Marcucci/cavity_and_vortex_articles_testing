@@ -1,9 +1,9 @@
 clear,close all
 folder="SIM02_spiral_outcoupler/far_field_data/";
 
-for top_charge=-1
+for top_charge=1
  
-load(strcat(folder,"spiral_outcoupler","charge",string(top_charge)));
+load(strcat(folder,"spiral_outcoupler","betterSource_charge",string(top_charge)));
 % 
 % useful_ux = abs(ux)<0.2;
 % useful_uy = abs(uy)<0.2;

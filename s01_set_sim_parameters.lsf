@@ -12,7 +12,7 @@ cd(main_dir);
 
 # source
 lambda=532e-9;
-width=3e-9;
+width=126e-9;
 
 # multilayer
 nH=2.08;
@@ -39,18 +39,18 @@ N_outcoupler = 5;
 N_charge = 1;                     # topological charge
 period_dbr = 0;
 period_outcoupler = 450e-9;
-spacing_cavity_outcoupler = 5000e-9;
+spacing_cavity_outcoupler = 6000e-9;
 spacing_after_outcoupler = 5000e-9;
 
 source_zloc=tail+10e-9;
 
 # domain
-L_domain=15.5e-6;#cavity_diameter+2*(N_dbr*period_dbr+spacing_cavity_outcoupler+
+L_domain=17e-6;#cavity_diameter+2*(N_dbr*period_dbr+spacing_cavity_outcoupler+
                  #N_outcoupler*period_outcoupler+period_outcoupler+spacing_after_outcoupler);
 PML_extension_xy=5e-6;
 PML_extension_z=1e-6;
 L_sample = L_domain+PML_extension_xy;
-d_air=800e-9;
+d_air=400e-9;
 
 # set simulation parameter
 
@@ -60,7 +60,7 @@ select("FDTD");
     set("x span",L_domain);
     set("y span",L_domain);
     set("z min",-thickness);
-    set("z max",d_air);
+    set("z max",tail+d_air);
     set("dimension","3D");
     set("background index",1);
     set("simulation time",10000e-15);
@@ -121,8 +121,8 @@ select("outcoupler");
     
 select("beam block");
     set("radius",2*cavity_diameter+spacing_cavity_outcoupler/2);
-    set("z min",tail+d_air*3/4);
-    set("z max",tail+d_air*3/4+100e-9);
+    set("z min",tail+50e-9);
+    set("z max",tail+100e-9);
     set("material",'PEC (Perfect Electrical Conductor)');
     set('enabled',1);
     
@@ -139,6 +139,7 @@ select("TE source x");
     set("optimize for short pulse",0);
     set("center wavelength",lambda);
     set("wavelength span",width);
+    set("optimize for short pulse",1);                           
     set("phase",0);
     set("theta",90);
     set("phi",0);
@@ -152,6 +153,7 @@ select("TE source y");
     set("optimize for short pulse",0);
     set("center wavelength",lambda);
     set("wavelength span",width);
+    set("optimize for short pulse",1);  
     set("phase",90);
     set("theta",90);
     set("phi",90);
@@ -162,7 +164,7 @@ select("top field power");
     set("y",0);
     set("x span",L_domain);
     set("y span",L_domain);
-    set("z",tail+d_air*3/4+110e-9);
+    set("z",tail+110e-9);
     set('override global monitor settings',1);
     set('use source limits',0);
     set('frequency points',1);
@@ -239,9 +241,9 @@ select("monitor xy");
 select("");
 
 
-details = 'charge';
+details = 'betterSource_charge';
 filename = folder +'/'+ sim_name + details + num2str(N_charge) + '.fsp' ;
 save(filename);
-
+run;
 cd(main_dir);
 

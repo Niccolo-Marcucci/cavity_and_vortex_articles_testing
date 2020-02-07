@@ -3,8 +3,8 @@ main_dir = pwd;
 
 sim_name = 'spiral_outcoupler';
 folder = 'SIM02_'+ sim_name;
-details = 'charge';
-for (j=[-1]) {
+details = 'betterSource_charge';
+for (j=[1]) {
     filename = sim_name + details + num2str(j) +'.fsp' ;
     load(folder +'/'+ filename);
     cd(main_dir);
