@@ -39,18 +39,18 @@ N_outcoupler = 5;
 N_charge = 1;                     # topological charge
 period_dbr = 0;
 period_outcoupler = 450e-9;
-spacing_cavity_outcoupler = 6000e-9;
+spacing_cavity_outcoupler = 6000e-9-period_outcoupler;
 spacing_after_outcoupler = 5000e-9;
 
-source_zloc=tail+10e-9;
+source_zloc=tail+43e-9;
 
 # domain
-L_domain=17e-6;#cavity_diameter+2*(N_dbr*period_dbr+spacing_cavity_outcoupler+
+L_domain=16e-6;#cavity_diameter+2*(N_dbr*period_dbr+spacing_cavity_outcoupler+
                  #N_outcoupler*period_outcoupler+period_outcoupler+spacing_after_outcoupler);
 PML_extension_xy=5e-6;
 PML_extension_z=1e-6;
 L_sample = L_domain+PML_extension_xy;
-d_air=400e-9;
+d_air=600e-9;
 
 # set simulation parameter
 
@@ -72,10 +72,10 @@ select("mesh_top");
     set("y",0);
     set("x span",L_domain);
     set("y span",L_domain);
-    set("z min",-N_couples/2*(dH+dL));
+    set("z min",-2*(dH+dL));
     set("z max",tail+d_air);
-    set("dx",25e-9);
-    set("dy",25e-9);
+    set("dx",30e-9);
+    set("dy",30e-9);
     set("dz",10e-9);
     set('enabled',1); 
 
@@ -121,8 +121,8 @@ select("outcoupler");
     
 select("beam block");
     set("radius",2*cavity_diameter+spacing_cavity_outcoupler/2);
-    set("z min",tail+50e-9);
-    set("z max",tail+100e-9);
+    set("z min",tail+118e-9);
+    set("z max",tail+118e-9+70e-9);
     set("material",'PEC (Perfect Electrical Conductor)');
     set('enabled',1);
     
@@ -164,7 +164,7 @@ select("top field power");
     set("y",0);
     set("x span",L_domain);
     set("y span",L_domain);
-    set("z",tail+110e-9);
+    set("z",tail+318e-9);
     set('override global monitor settings',1);
     set('use source limits',0);
     set('frequency points',1);
@@ -241,7 +241,7 @@ select("monitor xy");
 select("");
 
 
-details = 'betterSource_charge';
+details = 'CloserSource_charge';
 filename = folder +'/'+ sim_name + details + num2str(N_charge) + '.fsp' ;
 save(filename);
 run;
