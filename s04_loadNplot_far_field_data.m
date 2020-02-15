@@ -23,8 +23,8 @@ sin_phi = uy./sin(theta);
 Ex = E_theta.*cos_phi - E_phi.*sin_phi;
 Ey = E_theta.*sin_phi + E_phi.*cos_phi;
 
-EL = +sqrt(2)/2*Ex + sqrt(2)/2*Ey*exp(+1i*pi/2);
-ER = -sqrt(2)/2*Ex + sqrt(2)/2*Ey*exp(+1i*pi/2);
+EL = sqrt(2)/2*( Ex + Ey*exp(+1i*pi/2));
+ER = sqrt(2)/2*(-Ex + Ey*exp(+1i*pi/2));
 
 S3 = 1i*(Ex.*conj(Ey)-Ey.*conj(Ex));
 chi = 0.5*asin( real(S3)./(abs(Ex).^2+abs(Ey).^2));
