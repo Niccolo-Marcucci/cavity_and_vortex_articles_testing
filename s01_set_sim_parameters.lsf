@@ -10,6 +10,8 @@ filename = folder +'/'+ sim_name + details + '.fsp' ;
 load(filename);
 cd(main_dir);
 
+newdetails = '_charge';
+
 # source
 lambda=532e-9;
 width=126e-9;
@@ -35,22 +37,22 @@ groove_idx = 1;
 
 cavity_diameter = 0;
 N_dbr = 0;
-N_outcoupler = 5;
+N_outcoupler = 8;
 N_charge = 1;                     # topological charge
 period_dbr = 0;
 period_outcoupler = 450e-9;
-spacing_cavity_outcoupler = 6000e-9-period_outcoupler;
+spacing_cavity_outcoupler = 3000e-9;
 spacing_after_outcoupler = 5000e-9;
 
 source_zloc=tail+43e-9;
 
 # domain
-L_domain=16e-6;#cavity_diameter+2*(N_dbr*period_dbr+spacing_cavity_outcoupler+
+L_domain=15e-6;#cavity_diameter+2*(N_dbr*period_dbr+spacing_cavity_outcoupler+
                  #N_outcoupler*period_outcoupler+period_outcoupler+spacing_after_outcoupler);
 PML_extension_xy=5e-6;
 PML_extension_z=1e-6;
 L_sample = L_domain+PML_extension_xy;
-d_air=600e-9;
+d_air=650e-9;
 
 # set simulation parameter
 
@@ -120,9 +122,9 @@ select("outcoupler");
     set("z min", 0);
     
 select("beam block");
-    set("radius",2*cavity_diameter+spacing_cavity_outcoupler/2);
-    set("z min",tail+118e-9);
-    set("z max",tail+118e-9+70e-9);
+    set("radius",2*cavity_diameter+spacing_cavity_outcoupler/3*2);
+    set("z min",tail+500e-9);
+    set("z max",tail+500e-9+70e-9);
     set("material",'PEC (Perfect Electrical Conductor)');
     set('enabled',1);
     
@@ -164,11 +166,12 @@ select("top field power");
     set("y",0);
     set("x span",L_domain);
     set("y span",L_domain);
-    set("z",tail+318e-9);
+    set("z",tail+600e-9);
     set('override global monitor settings',1);
     set('use source limits',0);
-    set('frequency points',1);
+    set('frequency points',5);
     set('wavelength center',lambda);
+    set('wavelength span',30e-9);
     
 
 select("near field power");
@@ -184,24 +187,22 @@ select("near field power");
     
 select("resonance finder outside");
     set("radius",cavity_diameter/2+N_dbr*period_dbr+spacing_cavity_outcoupler/2);
-    set("z",-tail/2);
+    set("z",tail/2);
+    set('enabled',0);
 
 select("resonance finder inside");
     set("x",0);
     set("y",0);
     set("radius",cavity_diameter/2);
     set("z",tail/2);
+    set('enabled',0);
     
-#select("Qanalysis");
-    #set("x",0);
-    #set("y",0);
+select("Qanalysis");
+    set("x",0);
+    set("y",0);
     #set("radius",cavity_diameter/2);
-    #set("z",tail/2);
-    
-#select("Qanalysis");
-    #set("x",0);
-    #set("y",0);
-    #set("z",tail/2);
+    set("z",tail/2);
+    set('enabled',0);
     
         
 select("monitor yz");
@@ -241,8 +242,7 @@ select("monitor xy");
 select("");
 
 
-details = 'CloserSource_charge';
-filename = folder +'/'+ sim_name + details + num2str(N_charge) + '.fsp' ;
+filename = folder +'/'+ sim_name + newdetails + num2str(N_charge) + '.fsp' ;
 save(filename);
 run;
 cd(main_dir);
