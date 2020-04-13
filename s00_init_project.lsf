@@ -10,14 +10,12 @@ deleteall;
 
 main_dir = pwd;
 
-sim_name = 'spiral_outcoupler';
-folder = 'SIM02_'+ sim_name;
+sim_name = 'circular_cavity';
+folder = 'SIM03_'+ sim_name;
 details = '';
 filename = folder +'/'+ sim_name + details + '.fsp';
 
 lib_dir = "Lumerical-Objects/";                                    
-
-cd(lib_dir);
 
 addfdtd;
 
@@ -26,17 +24,19 @@ set('name','mesh_top');
 
 # elements in the personal library
 
+cd(lib_dir);
+
 multilayer;
 set('name','multilayer');
 
 addrect;   # useful for overriding the last layer of the multilayer
 set('name','pmma layer');
 
-#circular_cavity;
-#set('name','circular cavity');
+circular_cavity;
+set('name','circular cavity');
 
-spiral_outcoupler;
-set('name','outcoupler');
+#spiral_outcoupler;
+#set('name','outcoupler');
 
 # elements in the standard library
 
@@ -81,7 +81,7 @@ set('domain dimensions',2);
 
 
 # save the project in .fps 
-cd('../');
+cd(main_dir);
 
 save(filename);
 

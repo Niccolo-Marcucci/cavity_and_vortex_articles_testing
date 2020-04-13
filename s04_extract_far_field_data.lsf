@@ -4,8 +4,7 @@ main_dir = pwd;
 sim_name = 'spiral_outcoupler';
 folder = 'SIM02_'+ sim_name;
 #details = 'betterSource_charge';
-#details = 'CloserSource_smalleRadius_charge';
-details = '_charge';
+details = 'CloserSource_charge';
 for (j=[1]) {
     filename = sim_name + details + num2str(j) +'.fsp' ;
     load(folder +'/'+ filename);
